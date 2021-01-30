@@ -3,9 +3,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const createError = require("http-errors");
+require("dotenv").config();
+
+const app = express();
 
 const indexRouter = require("./routes/index");
-const app = express();
+require("./models");
 
 app.use(logger("dev"));
 app.use(express.json());
