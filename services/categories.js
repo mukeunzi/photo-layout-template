@@ -15,4 +15,11 @@ const findOneByName = async (name) => {
 	return result;
 };
 
-module.exports = { insertCategory, findOneByName };
+const findAll = async () => {
+	const result = await category.findAll({
+		attributes: ["id", "name", "visible"],
+	});
+	return result;
+};
+
+module.exports = { insertCategory, findOneByName, findAll };

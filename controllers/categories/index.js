@@ -14,4 +14,14 @@ const createCategory = async (req, res, next) => {
 	return res.status(201).json({ result: "카테고리가 생성되었습니다." });
 };
 
-module.exports = { createCategory };
+const getCategoryList = async (req, res, next) => {
+	const categoryList = await CategoryService.findAll();
+	const result = categoryList.map((category) => {
+		const { id, name, visible } = category;
+		return { id: id.toString(), name, visible };
+	});
+
+	return res.status(200).json({ result });
+};
+
+module.exports = { createCategory, getCategoryList };
