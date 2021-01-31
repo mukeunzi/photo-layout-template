@@ -1,13 +1,13 @@
 "use strict";
-const { Model } = require("sequelize");
 
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-	class category extends Model {
+	class template extends Model {
 		static associate(models) {
-			models.category.hasMany(models.template, { foreignKey: { name: "category_id", allowNull: false } });
+			models.template.belongsTo(models.category, { as: "categoryId", foreignKey: "category_id" });
 		}
 	}
-	category.init(
+	template.init(
 		{
 			id: {
 				allowNull: false,
@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
 				type: "BINARY(16)",
 			},
 			name: {
+				allowNull: false,
+				type: DataTypes.STRING,
+			},
+			thumbnailUrl: {
+				allowNull: false,
+				type: DataTypes.STRING,
+			},
+			assetUrl: {
 				allowNull: false,
 				type: DataTypes.STRING,
 			},
@@ -34,11 +42,11 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "category",
+			modelName: "template",
 			underscored: true,
 			freezeTableName: true,
 			timestamps: true,
 		}
 	);
-	return category;
+	return template;
 };
