@@ -29,4 +29,9 @@ const findOneById = async (id) => {
 	return result;
 };
 
-module.exports = { insertCategory, findOneByName, findAll, findOneById };
+const deleteOneById = async (id) => {
+	const result = await category.destroy({ where: { id } });
+	return result;
+};
+
+module.exports = { insertCategory, findOneByName, findAll, findOneById, deleteOneById };
