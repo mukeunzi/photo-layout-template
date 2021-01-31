@@ -3,7 +3,7 @@ const CategoryService = require("../../services/categories");
 
 const createCategory = async (req, res, next) => {
 	const { body } = req;
-	validation.validateCategory({ name: body.name });
+	validation.validateInsertCategory({ name: body.name });
 
 	const existsName = await CategoryService.findOneByName(body.name);
 	if (existsName) return res.status(400).json({ message: "이미 사용중인 이름입니다." });
