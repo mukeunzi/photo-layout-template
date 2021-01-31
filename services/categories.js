@@ -34,4 +34,8 @@ const deleteOneById = async (id) => {
 	return result;
 };
 
-module.exports = { insertCategory, findOneByName, findAll, findOneById, deleteOneById };
+const updateOne = async (id, name, visible) => {
+	await category.update({ name, visible: parseInt(visible, 10) }, { where: { id } });
+};
+
+module.exports = { insertCategory, findOneByName, findAll, findOneById, deleteOneById, updateOne };

@@ -40,4 +40,17 @@ const deleteCategory = async (req, res, next) => {
 	return res.status(200).json({ result: "카테고리가 삭제되었습니다." });
 };
 
-module.exports = { createCategory, getCategoryList, getCategory, deleteCategory };
+const updateCategory = async (req, res, next) => {
+	const { id } = req.params;
+	const { name, visible } = req.body;
+
+	const category = await CategoryService.findOneById(id);
+	if (!category) return res.status(400).json({ message: "존재하지 않는 카테고리입니다." });
+
+	validation.validateUpdateCategory({ name, visible });
+
+	await CategoryService.updateOne(id, name, visible);
+	return res.status(200).json({ result: { id, name, visible } });
+};
+
+module.exports = { createCategory, getCategoryList, getCategory, deleteCategory, updateCategory };
