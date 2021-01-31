@@ -24,4 +24,13 @@ const getCategoryList = async (req, res, next) => {
 	return res.status(200).json({ result });
 };
 
-module.exports = { createCategory, getCategoryList };
+const getCategory = async (req, res, next) => {
+	const category = await CategoryService.findOneById(req.params.id);
+	if (!category) return res.status(404).json({ message: "존재하지 않는 카테고리입니다." });
+
+	const { id, name, visible } = category;
+	const result = { id: id.toString(), name, visible };
+	return res.status(200).json({ result });
+};
+
+module.exports = { createCategory, getCategoryList, getCategory };

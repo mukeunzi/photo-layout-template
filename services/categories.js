@@ -22,4 +22,11 @@ const findAll = async () => {
 	return result;
 };
 
-module.exports = { insertCategory, findOneByName, findAll };
+const findOneById = async (id) => {
+	const result = await category.findByPk(id, {
+		attributes: ["id", "name", "visible"],
+	});
+	return result;
+};
+
+module.exports = { insertCategory, findOneByName, findAll, findOneById };
