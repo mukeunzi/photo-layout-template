@@ -27,4 +27,9 @@ const findOne = async (categoryId, name) => {
 	return result;
 };
 
-module.exports = { insertTemplate, findAll, findOne };
+const deleteOneById = async (id) => {
+	const result = await template.destroy({ where: { id } });
+	return result;
+};
+
+module.exports = { insertTemplate, findAll, findOne, deleteOneById };

@@ -13,4 +13,6 @@ const fileUpload = upload.fields([
 ]);
 router.post("/", fileUpload, asyncWrapper(TemplatesController.createTemplate));
 
+router.delete("/:id", asyncWrapper(TemplatesController.deleteTemplate));
+
 module.exports = router;

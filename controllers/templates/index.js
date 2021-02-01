@@ -38,4 +38,11 @@ const getTemplateList = async (req, res, next) => {
 	return res.status(200).json({ result });
 };
 
-module.exports = { createTemplate, getTemplateList };
+const deleteTemplate = async (req, res, next) => {
+	const deleted = await TemplateService.deleteOneById(req.params.id);
+	if (!deleted) return res.status(400).json({ message: "존재하지 않는 템플릿입니다." });
+
+	return res.status(200).json({ result: "템플릿이 삭제되었습니다." });
+};
+
+module.exports = { createTemplate, getTemplateList, deleteTemplate };
