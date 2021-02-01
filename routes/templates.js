@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { asyncWrapper } = require("../utils");
+const { asyncWrapper } = require("../utils/error");
 const TemplatesController = require("../controllers/templates");
 const { upload } = require("../utils/aws");
 

@@ -4,4 +4,6 @@ const ErrorMsg = (message, status = 500) => {
 	throw new createErrors(status, message);
 };
 
-module.exports = { ErrorMsg };
+const asyncWrapper = (fn) => async (req, res, next) => await fn(req, res, next).catch(next);
+
+module.exports = { ErrorMsg, asyncWrapper };
