@@ -1,4 +1,4 @@
-const { template } = require("../models");
+const { template, category } = require("../models");
 const { timestampOnlyUUID } = require("../utils");
 
 const insertTemplate = async (data) => {
@@ -14,9 +14,17 @@ const insertTemplate = async (data) => {
 	return createdTemplate;
 };
 
+const findAll = async () => {
+	const result = await template.findAll({
+		attributes: ["id", "name", "thumbnailUrl", "assetUrl", "visible"],
+		include: [{ model: category, as: "category", attributes: ["id", "name", "visible"] }],
+	});
+	return result;
+};
+
 const findOne = async (categoryId, name) => {
 	const result = await template.findOne({ where: { categoryId, name } });
 	return result;
 };
 
-module.exports = { insertTemplate, findOne };
+module.exports = { insertTemplate, findAll, findOne };

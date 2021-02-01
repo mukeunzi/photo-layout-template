@@ -23,4 +23,19 @@ const createTemplate = async (req, res, next) => {
 	return res.status(201).json({ result: "템플릿이 생성되었습니다." });
 };
 
-module.exports = { createTemplate };
+const getTemplateList = async (req, res, next) => {
+	const templateList = await TemplateService.findAll();
+	const result = templateList.map((template) => {
+		const { id, name, thumbnailUrl, assetUrl, visible } = template;
+		const category = {
+			id: template.category.id.toString(),
+			name: template.category.name,
+			visible: template.category.visible,
+		};
+		return { id: id.toString(), name, thumbnailUrl, assetUrl, visible, category };
+	});
+
+	return res.status(200).json({ result });
+};
+
+module.exports = { createTemplate, getTemplateList };
