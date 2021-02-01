@@ -18,4 +18,13 @@ const validatePatchTemplate = (template) => {
 	return true;
 };
 
-module.exports = { validateInsertTemplate, validatePatchTemplate };
+const validateDownloadTemplate = (template) => {
+	const { fileType } = template;
+
+	if (!["thumbnail", "asset"].includes(fileType))
+		return ErrorMsg({ message: "다운로드할 파일을 다시 선택하세요." }, 400);
+
+	return true;
+};
+
+module.exports = { validateInsertTemplate, validatePatchTemplate, validateDownloadTemplate };

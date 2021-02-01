@@ -6,6 +6,7 @@ const TemplatesController = require("../controllers/templates");
 const { upload } = require("../utils/aws");
 
 router.get("/search", asyncWrapper(TemplatesController.searchTemplateByName));
+router.get("/download/:id/:fileType", asyncWrapper(TemplatesController.downloadFile));
 router.get("/", asyncWrapper(TemplatesController.getTemplateList));
 
 const fileUpload = upload.fields([

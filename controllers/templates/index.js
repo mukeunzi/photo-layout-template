@@ -1,6 +1,8 @@
 const validation = require("./validation");
 const CategoryService = require("../../services/categories");
 const TemplateService = require("../../services/templates");
+const { s3 } = require("../../utils/aws");
+const { getFileName, getFileExtension, getDate } = require("../../utils");
 
 const createTemplate = async (req, res, next) => {
 	validation.validateInsertTemplate(req.body);
@@ -78,4 +80,32 @@ const updateTemplate = async (req, res, next) => {
 	return res.status(200).json({ result: { id, categoryId, name, visible } });
 };
 
-module.exports = { createTemplate, getTemplateList, searchTemplateByName, deleteTemplate, updateTemplate };
+const downloadFile = async (req, res, next) => {
+	const { id, fileType } = req.params;
+
+	const template = await TemplateService.findOneById(id);
+	if (!template) return res.status(400).json({ message: "존재하지 않는 템플릿입니다." });
+
+	validation.validateDownloadTemplate({ fileType });
+
+	const urls = { thumbnail: template.thumbnailUrl, asset: template.assetUrl };
+	const fileName = getFileName(urls[fileType]);
+	if (!fileName) return res.status(400).json({ message: "파일을 다운로드할 수 없습니다." });
+
+	const params = {
+		Bucket: process.env.AWS_S3_BUCKET_NAME,
+		Key: fileName,
+	};
+	const fileStream = s3.getObject(params).createReadStream();
+	res.attachment(`pixo-template-${fileType}-${getDate()}${getFileExtension(fileName)}`);
+	fileStream.pipe(res);
+};
+
+module.exports = {
+	createTemplate,
+	getTemplateList,
+	searchTemplateByName,
+	deleteTemplate,
+	updateTemplate,
+	downloadFile,
+};
