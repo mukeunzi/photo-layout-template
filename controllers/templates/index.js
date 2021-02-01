@@ -38,6 +38,24 @@ const getTemplateList = async (req, res, next) => {
 	return res.status(200).json({ result });
 };
 
+const searchTemplateByName = async (req, res, next) => {
+	if (!req.query.q) return res.redirect(302, "/");
+
+	const name = req.query.q;
+	const templateList = await TemplateService.searchAll(name);
+	const result = templateList.map((template) => {
+		const { id, name, thumbnailUrl, assetUrl, visible } = template;
+		const category = {
+			id: template.category.id.toString(),
+			name: template.category.name,
+			visible: template.category.visible,
+		};
+		return { id: id.toString(), name, thumbnailUrl, assetUrl, visible, category };
+	});
+
+	return res.status(200).json({ result });
+};
+
 const deleteTemplate = async (req, res, next) => {
 	const deleted = await TemplateService.deleteOneById(req.params.id);
 	if (!deleted) return res.status(400).json({ message: "존재하지 않는 템플릿입니다." });
@@ -60,4 +78,4 @@ const updateTemplate = async (req, res, next) => {
 	return res.status(200).json({ result: { id, categoryId, name, visible } });
 };
 
-module.exports = { createTemplate, getTemplateList, deleteTemplate, updateTemplate };
+module.exports = { createTemplate, getTemplateList, searchTemplateByName, deleteTemplate, updateTemplate };

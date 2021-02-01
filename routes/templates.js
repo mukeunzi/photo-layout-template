@@ -5,6 +5,7 @@ const { asyncWrapper } = require("../utils/error");
 const TemplatesController = require("../controllers/templates");
 const { upload } = require("../utils/aws");
 
+router.get("/search", asyncWrapper(TemplatesController.searchTemplateByName));
 router.get("/", asyncWrapper(TemplatesController.getTemplateList));
 
 const fileUpload = upload.fields([

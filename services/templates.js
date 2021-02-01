@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 const { template, category } = require("../models");
 const { timestampOnlyUUID } = require("../utils");
 
@@ -34,6 +36,15 @@ const findOneById = async (id) => {
 	return result;
 };
 
+const searchAll = async (name) => {
+	const result = await template.findAll({
+		where: { name: { [Op.substring]: name }, visible: 1 },
+		attributes: ["id", "name", "thumbnailUrl", "assetUrl", "visible"],
+		include: [{ model: category, as: "category", attributes: ["id", "name", "visible"], where: { visible: 1 } }],
+	});
+	return result;
+};
+
 const deleteOneById = async (id) => {
 	const result = await template.destroy({ where: { id } });
 	return result;
@@ -43,4 +54,4 @@ const updateOne = async (id, categoryId, name, visible) => {
 	await template.update({ categoryId, name, visible: parseInt(visible, 10) }, { where: { id } });
 };
 
-module.exports = { insertTemplate, findAll, findOne, findOneById, deleteOneById, updateOne };
+module.exports = { insertTemplate, findAll, findOne, findOneById, searchAll, deleteOneById, updateOne };
