@@ -4,7 +4,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class template extends Model {
 		static associate(models) {
-			models.template.belongsTo(models.category, { as: "categoryId", foreignKey: "category_id" });
+			models.template.belongsTo(models.category, { as: "category", foreignKey: "category_id" });
 		}
 	}
 	template.init(
