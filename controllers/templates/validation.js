@@ -9,4 +9,13 @@ const validateInsertTemplate = (template) => {
 	return true;
 };
 
-module.exports = { validateInsertTemplate };
+const validatePatchTemplate = (template) => {
+	const { name, visible } = template;
+
+	if (!name || !name.length) return ErrorMsg({ message: "템플릿 이름을 입력하세요." }, 400);
+	if (!["0", "1"].includes(visible)) return ErrorMsg({ message: "템플릿 노출여부를 다시 선택하세요." }, 400);
+
+	return true;
+};
+
+module.exports = { validateInsertTemplate, validatePatchTemplate };

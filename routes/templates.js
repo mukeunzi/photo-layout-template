@@ -15,4 +15,6 @@ router.post("/", fileUpload, asyncWrapper(TemplatesController.createTemplate));
 
 router.delete("/:id", asyncWrapper(TemplatesController.deleteTemplate));
 
+router.patch("/:id", asyncWrapper(TemplatesController.updateTemplate));
+
 module.exports = router;

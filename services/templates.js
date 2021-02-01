@@ -27,9 +27,20 @@ const findOne = async (categoryId, name) => {
 	return result;
 };
 
+const findOneById = async (id) => {
+	const result = await template.findByPk(id, {
+		attributes: ["id", "name", "thumbnailUrl", "assetUrl", "visible"],
+	});
+	return result;
+};
+
 const deleteOneById = async (id) => {
 	const result = await template.destroy({ where: { id } });
 	return result;
 };
 
-module.exports = { insertTemplate, findAll, findOne, deleteOneById };
+const updateOne = async (id, categoryId, name, visible) => {
+	await template.update({ categoryId, name, visible: parseInt(visible, 10) }, { where: { id } });
+};
+
+module.exports = { insertTemplate, findAll, findOne, findOneById, deleteOneById, updateOne };

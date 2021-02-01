@@ -45,4 +45,19 @@ const deleteTemplate = async (req, res, next) => {
 	return res.status(200).json({ result: "템플릿이 삭제되었습니다." });
 };
 
-module.exports = { createTemplate, getTemplateList, deleteTemplate };
+const updateTemplate = async (req, res, next) => {
+	const { id } = req.params;
+	const { categoryId, name, visible } = req.body;
+
+	const template = await TemplateService.findOneById(id);
+	if (!template) return res.status(400).json({ message: "존재하지 않는 템플릿입니다." });
+	const category = await CategoryService.findOneById(categoryId);
+	if (!category) return res.status(400).json({ message: "존재하지 않는 카테고리입니다." });
+
+	validation.validatePatchTemplate({ name, visible });
+
+	await TemplateService.updateOne(id, categoryId, name, visible);
+	return res.status(200).json({ result: { id, categoryId, name, visible } });
+};
+
+module.exports = { createTemplate, getTemplateList, deleteTemplate, updateTemplate };
