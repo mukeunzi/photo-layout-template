@@ -1,13 +1,16 @@
-const { v1: uuidV1 } = require("uuid");
-
 const { template } = require("../models");
+const { timestampOnlyUUID } = require("../utils");
 
 const insertTemplate = async (data) => {
 	const { categoryId, name, thumbnailUrl, assetUrl } = data;
-	const [time1, time2, time3] = uuidV1().split("-");
-	const uuid = time3 + time2 + time1;
 
-	const createdTemplate = await template.create({ id: uuid, category_id: categoryId, name, thumbnailUrl, assetUrl });
+	const createdTemplate = await template.create({
+		id: timestampOnlyUUID(),
+		category_id: categoryId,
+		name,
+		thumbnailUrl,
+		assetUrl,
+	});
 	return createdTemplate;
 };
 

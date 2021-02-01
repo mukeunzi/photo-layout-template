@@ -1,12 +1,8 @@
-const { v1: uuidV1 } = require("uuid");
-
 const { category } = require("../models");
+const { timestampOnlyUUID } = require("../utils");
 
 const insertCategory = async (name) => {
-	const [time1, time2, time3] = uuidV1().split("-");
-	const uuid = time3 + time2 + time1;
-
-	const createdCategory = await category.create({ id: uuid, name });
+	const createdCategory = await category.create({ id: timestampOnlyUUID(), name });
 	return createdCategory;
 };
 
