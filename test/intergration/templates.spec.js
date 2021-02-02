@@ -97,3 +97,15 @@ describe("[GET] /api/templates", () => {
 		expect(result[0].category.visible).toBeDefined();
 	});
 });
+
+describe("[GET] /api/templates/search", () => {
+	it("템플릿 이름 검색 성공", async () => {
+		const response = await request(app).get(
+			`/api/templates/search?q=${encodeURIComponent(templateName.substring(0, 2))}`
+		);
+		const { result } = response.body;
+
+		expect(response.statusCode).toBe(200);
+		expect(Array.isArray(result)).toBeTruthy();
+	});
+});
