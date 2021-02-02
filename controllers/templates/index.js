@@ -29,11 +29,13 @@ const getTemplateList = async (req, res, next) => {
 	const templateList = await TemplateService.findAll();
 	const result = templateList.map((template) => {
 		const { id, name, thumbnailUrl, assetUrl, visible } = template;
-		const category = {
-			id: template.category.id.toString(),
-			name: template.category.name,
-			visible: template.category.visible,
-		};
+		const category = template.category
+			? {
+					id: template.category.id.toString(),
+					name: template.category.name,
+					visible: template.category.visible,
+			  }
+			: null;
 		return { id: id.toString(), name, thumbnailUrl, assetUrl, visible, category };
 	});
 

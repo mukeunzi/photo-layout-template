@@ -93,11 +93,8 @@ describe("[GET] /api/templates", () => {
 		expect(result[0].thumbnailUrl).toBeDefined();
 		expect(result[0].assetUrl).toBeDefined();
 		expect(result[0].visible).toBeDefined();
-		expect(result[0].category.id).toBeDefined();
-		expect(result[0].category.name).toBeDefined();
-		expect(result[0].category.visible).toBeDefined();
 
-		templateId = result[0].id;
+		templateId = result[0].id.toString();
 	});
 });
 
