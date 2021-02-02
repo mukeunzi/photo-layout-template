@@ -1,18 +1,22 @@
 const request = require("supertest");
 
 const app = require("../../app");
-const CategoryService = require("../../services/categories");
 const { thumbnailPath, assetPath, updateTemplate } = require("../data/templates");
+const { newCategory } = require("../data/categories");
 
 let categoryId;
 let templateId;
 const templateName = `템플릿${Date.now()}`;
 
+beforeAll(async () => {
+	await request(app).post(`/api/categories`).send(newCategory);
+
+	const response = await request(app).get(`/api/categories`);
+	categoryId = response.body.result[0].id;
+});
+
 describe("[POST] /api/templates", () => {
 	it("템플릿 생성 성공", async () => {
-		const [category] = await CategoryService.findAll();
-		categoryId = category.id;
-
 		const response = await request(app)
 			.post(`/api/templates`)
 			.field("name", `${templateName}`)
@@ -140,12 +144,12 @@ describe("[PATCH] /api/templates/:id", () => {
 	it("카테고리 수정 성공", async () => {
 		const response = await request(app)
 			.patch(`/api/templates/${templateId}`)
-			.send({ ...updateTemplate, categoryId: categoryId.toString() });
+			.send({ ...updateTemplate, categoryId });
 		const { result } = response.body;
 
 		expect(response.statusCode).toBe(200);
 		expect(result.id).toBe(templateId);
-		expect(result.categoryId).toBe(categoryId.toString());
+		expect(result.categoryId).toBe(categoryId);
 		expect(result.name).toBe(updateTemplate.name);
 		expect(result.visible).toBe(updateTemplate.visible);
 	});
@@ -153,7 +157,7 @@ describe("[PATCH] /api/templates/:id", () => {
 	it("템플릿 id가 유효하지 않을 경우 오류 발생", async () => {
 		const response = await request(app)
 			.patch(`/api/templates/test`)
-			.send({ ...updateTemplate, categoryId: categoryId.toString() });
+			.send({ ...updateTemplate, categoryId });
 
 		expect(response.statusCode).toBe(400);
 		expect(response.body.message).toBe("존재하지 않는 템플릿입니다.");
