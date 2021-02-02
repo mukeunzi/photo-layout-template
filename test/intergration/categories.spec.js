@@ -72,3 +72,17 @@ describe("[PUT] /api/categories/:id", () => {
 		expect(response.body.message).toBe("존재하지 않는 카테고리입니다.");
 	});
 });
+
+describe("[DELETE] /api/categories/:id", () => {
+	it("카테고리 삭제 성공", async () => {
+		const response = await request(app).delete(`/api/categories/${categoryId}`);
+		expect(response.statusCode).toBe(200);
+	});
+
+	it("카테고리 id가 유효하지 않을 경우 오류 발생", async () => {
+		const response = await request(app).delete(`/api/categories/test`);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.body.message).toBe("존재하지 않는 카테고리입니다.");
+	});
+});
