@@ -80,3 +80,21 @@ describe("[POST] /api/templates", () => {
 		expect(response.body.message).toBe("이미 사용중인 이름입니다.");
 	});
 });
+
+describe("[GET] /api/templates", () => {
+	it("템플릿 전체 목록 조회", async () => {
+		const response = await request(app).get(`/api/templates`);
+		const { result } = response.body;
+
+		expect(response.statusCode).toBe(200);
+		expect(Array.isArray(result)).toBeTruthy();
+		expect(result[0].id).toBeDefined();
+		expect(result[0].name).toBeDefined();
+		expect(result[0].thumbnailUrl).toBeDefined();
+		expect(result[0].assetUrl).toBeDefined();
+		expect(result[0].visible).toBeDefined();
+		expect(result[0].category.id).toBeDefined();
+		expect(result[0].category.name).toBeDefined();
+		expect(result[0].category.visible).toBeDefined();
+	});
+});
