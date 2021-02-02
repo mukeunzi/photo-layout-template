@@ -41,7 +41,7 @@ const getTemplateList = async (req, res, next) => {
 };
 
 const searchTemplateByName = async (req, res, next) => {
-	if (!req.query.q) return res.redirect(302, "/");
+	if (!req.query.q) return res.redirect(302, "/api/templates");
 
 	const name = req.query.q;
 	const templateList = await TemplateService.searchAll(name);
