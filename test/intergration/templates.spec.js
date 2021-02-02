@@ -5,17 +5,16 @@ const CategoryService = require("../../services/categories");
 const { thumbnailPath, assetPath } = require("../data/templates");
 
 let categoryId;
-let categoryName;
+const templateName = `템플릿${Date.now()}`;
 
 describe("[POST] /api/templates", () => {
 	it("템플릿 생성 성공", async () => {
 		const [category] = await CategoryService.findAll();
 		categoryId = category.id;
-		categoryName = category.name;
 
 		const response = await request(app)
 			.post(`/api/templates`)
-			.field("name", `템플릿${Date.now()}`)
+			.field("name", `${templateName}`)
 			.field("categoryId", `${categoryId}`)
 			.attach("thumbnail", thumbnailPath)
 			.attach("asset", assetPath);
@@ -71,7 +70,7 @@ describe("[POST] /api/templates", () => {
 	it("템플릿 이름이 중복일 경우 오류 발생", async () => {
 		const response = await request(app)
 			.post(`/api/templates`)
-			.field("name", `${categoryName}`)
+			.field("name", `${templateName}`)
 			.field("categoryId", `${categoryId}`)
 			.attach("thumbnail", thumbnailPath)
 			.attach("asset", assetPath);
