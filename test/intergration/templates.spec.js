@@ -5,6 +5,7 @@ const CategoryService = require("../../services/categories");
 const { thumbnailPath, assetPath } = require("../data/templates");
 
 let categoryId;
+let templateId;
 const templateName = `템플릿${Date.now()}`;
 
 describe("[POST] /api/templates", () => {
@@ -95,6 +96,8 @@ describe("[GET] /api/templates", () => {
 		expect(result[0].category.id).toBeDefined();
 		expect(result[0].category.name).toBeDefined();
 		expect(result[0].category.visible).toBeDefined();
+
+		templateId = result[0].id;
 	});
 });
 
@@ -107,5 +110,31 @@ describe("[GET] /api/templates/search", () => {
 
 		expect(response.statusCode).toBe(200);
 		expect(Array.isArray(result)).toBeTruthy();
+	});
+});
+
+describe("[GET] /api/templates/download/:id/:fileType", () => {
+	it("템플릿 썸네일 이미지 다운로드 성공", async () => {
+		const response = await request(app).get(`/api/templates/download/${templateId}/thumbnail`);
+		expect(response.statusCode).toBe(200);
+	});
+
+	it("템플릿 에쎗 파일 다운로드 성공", async () => {
+		const response = await request(app).get(`/api/templates/download/${templateId}/asset`);
+		expect(response.statusCode).toBe(200);
+	});
+
+	it("템플릿 id가 유효하지 않을 경우 오류 발생", async () => {
+		const response = await request(app).get(`/api/templates/download/test/asset`);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.body.message).toBe("존재하지 않는 템플릿입니다.");
+	});
+
+	it("파일 타입(thumbnail, asset)이 유효하지 않을 경우 오류 발생", async () => {
+		const response = await request(app).get(`/api/templates/download/${templateId}/gif`);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.body.error.message).toBe("다운로드할 파일을 다시 선택하세요.");
 	});
 });
