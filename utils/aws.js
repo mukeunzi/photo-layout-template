@@ -21,7 +21,8 @@ const upload = multer({
 		},
 		key: function (req, file, cb) {
 			const extension = path.extname(file.originalname);
-			const fileName = encodeURIComponent(path.basename(file.originalname, extension));
+			const fileName = `template-${Date.now()}`;
+			encodeURIComponent(path.basename(file.originalname, extension));
 			cb(null, `${Date.now()}-${fileName}${extension}`);
 		},
 	}),
