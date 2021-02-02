@@ -2,7 +2,7 @@ const request = require("supertest");
 
 const app = require("../../app");
 const CategoryService = require("../../services/categories");
-const { newCategory } = require("../data/categories");
+const { newCategory, updateCategory } = require("../data/categories");
 
 let categoryId;
 
@@ -50,6 +50,25 @@ describe("[GET] /api/categories/:id", () => {
 		const response = await request(app).get(`/api/categories/test`);
 
 		expect(response.statusCode).toBe(404);
+		expect(response.body.message).toBe("존재하지 않는 카테고리입니다.");
+	});
+});
+
+describe("[PUT] /api/categories/:id", () => {
+	it("카테고리 수정 성공", async () => {
+		const response = await request(app).put(`/api/categories/${categoryId}`).send(updateCategory);
+		const { result } = response.body;
+
+		expect(response.statusCode).toBe(200);
+		expect(result.id).toBe(categoryId);
+		expect(result.name).toBe(updateCategory.name);
+		expect(result.visible).toBe(updateCategory.visible);
+	});
+
+	it("카테고리 id가 유효하지 않을 경우 오류 발생", async () => {
+		const response = await request(app).put(`/api/categories/test`).send(updateCategory);
+
+		expect(response.statusCode).toBe(400);
 		expect(response.body.message).toBe("존재하지 않는 카테고리입니다.");
 	});
 });
