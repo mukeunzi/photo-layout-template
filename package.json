@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "nodemon ./bin/www",
-		"test": "jest --forceExit"
+		"test": "jest --no-cache --forceExit"
 	},
 	"dependencies": {
 		"aws-sdk": "^2.834.0",

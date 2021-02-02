@@ -35,6 +35,7 @@ db.Sequelize = Sequelize;
 
 const driver = async () => {
 	try {
+		await db.sequelize.sync();
 		console.log("Connection Successful..!");
 	} catch (error) {
 		console.error("Connection failed..!!!", error);
